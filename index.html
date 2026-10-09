@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AeroVolt EV Enterprise - 2W & Multi-EV Range Intelligence & Fleet Ecosystem</title>
+  
+  <!-- Manifest & Web App Capabilities -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0a0f1d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
+  <!-- Leaflet CSS for Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  
+  <!-- Custom Design System -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="app-container">
+  
+  <!-- ============================================================== -->
+  <!-- SIDEBAR (DESKTOP / TABLET)                                     -->
+  <!-- ============================================================== -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1 data-i18n="appName">AeroVolt EV</h1>
+        <span class="brand-badge">ENTERPRISE 2W</span>
+      </div>
+    </div>
+
+    <nav class="nav-menu">
+      <a class="nav-item active" data-tab="dashboard">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+        <span class="nav-text" data-i18n="navDashboard">Dashboard</span>
+      </a>
+
+      <a class="nav-item" data-tab="map">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+        <span class="nav-text" data-i18n="navMap">Charging Stations</span>
+      </a>
+
+      <a class="nav-item" data-tab="route">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="19" r="3"/><circle cx="18" cy="5" r="3"/><path d="M12 19h4.5a3.5 3.5 0 0 0 0-7h-9a3.5 3.5 0 0 1 0-7H12"/></svg>
+        <span class="nav-text" data-i18n="navRoute">Trip Planner</span>
+      </a>
+
+      <a class="nav-item" data-tab="garage">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9C2.1 11.2 2 11.6 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+        <span class="nav-text" data-i18n="navVehicles">My Garage</span>
+      </a>
+
+      <a class="nav-item" data-tab="analytics">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <span class="nav-text" data-i18n="navAnalytics">Analytics & Health</span>
+      </a>
+
+      <a class="nav-item" data-tab="fleet">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <span class="nav-text" data-i18n="navFleet">Fleet Portal</span>
+        <span class="badge">6</span>
+      </a>
+
+      <a class="nav-item" data-tab="ecosystem">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+        <span class="nav-text" data-i18n="navEcosystem">Ecosystem & AI</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div style="font-size: 0.76rem; color: var(--text-muted);">
+        AeroVolt v2.4 Enterprise<br>
+        AI Range & Fleet Engine
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============================================================== -->
+  <!-- MAIN APPLICATION WRAPPER                                       -->
+  <!-- ============================================================== -->
+  <main class="main-wrapper">
+    
+    <!-- TOP APP HEADER -->
+    <header class="app-header">
+      <div class="header-left">
+        <!-- Quick Switch Vehicle Selector Pill -->
+        <div class="vehicle-selector-pill" onclick="switchTab('garage')">
+          <div class="vehicle-dot"></div>
+          <div>
+            <div class="vehicle-name-display" id="headerVehicleName">Ather 450X Gen 3</div>
+            <div class="vehicle-soc-display" id="headerVehicleSoc">78% Battery</div>
+          </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Multi-language Selector -->
+        <select class="lang-select" id="langSelect" title="Select Global Language">
+          <!-- Populated by i18n -->
+        </select>
+
+        <!-- Notification Alerts Bell -->
+        <button class="control-btn" id="alertsBellBtn" onclick="document.getElementById('alertsModal').classList.add('open')" title="Diagnostics & Alerts">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="badge" id="alertsBadge" style="position: absolute; top: 4px; right: 4px; font-size: 0.65rem; padding: 2px 5px; border-radius: 99px; background: var(--accent-rose); display: none;">0</span>
+        </button>
+
+        <!-- Dark/Light Theme Toggle -->
+        <button class="control-btn" id="themeToggleBtn" title="Toggle Theme">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        </button>
+
+        <!-- User Profile Pill -->
+        <div class="user-profile-badge">
+          <div class="avatar-img">EV</div>
+          <span style="font-size: 0.82rem; font-weight: 600;">Surya R.</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTENT TAB PANES -->
+    <div class="tab-content-area">
+
+      <!-- ========================================================== -->
+      <!-- TAB 1: DASHBOARD & PHYSICS RANGE ESTIMATOR                 -->
+      <!-- ========================================================== -->
+      <section class="tab-pane active" id="tab-dashboard">
+        
+        <div class="grid-dashboard-hero">
+          
+          <!-- Hero Circular Battery & Range Gauge -->
+          <div class="card hero-range-card">
+            <div class="radial-gauge-container">
+              <svg class="gauge-svg" viewBox="0 0 200 200">
+                <circle class="gauge-bg" cx="100" cy="100" r="90" />
+                <circle class="gauge-progress" id="gaugeProgress" cx="100" cy="100" r="90" stroke-dasharray="565.48" stroke-dashoffset="150" />
+              </svg>
+              <div class="gauge-inner-text">
+                <span class="range-number" id="heroRangeNumber">108</span>
+                <span class="range-unit">KM RANGE</span>
+                <span class="safe-range-pill" id="heroSafeRange">Safe Reserve: 92 km</span>
+              </div>
+            </div>
+
+            <div style="font-size: 0.84rem; color: var(--text-secondary); margin-top: 4px;">
+              Physics + AI Multi-Factor Continuous Estimation
+            </div>
+          </div>
+
+          <!-- Environmental & Physical Variables Sliders -->
+          <div class="card">
+            <div class="card-title">
+              <span data-i18n="ridingMode">Real-World Environmental Dynamics</span>
+            </div>
+            
+            <div class="factors-container">
+              <div class="factor-item">
+                <div class="factor-header">
+                  <span data-i18n="ambientTemp">Ambient Temperature</span>
+                  <span id="dispTemp">24°C</span>
+                </div>
+                <input type="range" class="slider-input" id="sliderTemp" min="-5" max="45" value="24">
+              </div>
+
+              <div class="factor-item">
+                <div class="factor-header">
+                  <span data-i18n="riderPayload">Rider & Cargo Payload</span>
+                  <span id="dispPayload">78 kg</span>
+                </div>
+                <input type="range" class="slider-input" id="sliderPayload" min="50" max="220" value="78">
+              </div>
+
+              <div class="grid-2">
+                <div class="factor-item">
+                  <div class="factor-header"><span data-i18n="ridingMode">Riding Mode</span></div>
+                  <select class="lang-select" id="selectMode" style="width: 100%;">
+                    <!-- Populated dynamically -->
+                  </select>
+                </div>
+
+                <div class="factor-item">
+                  <div class="factor-header"><span data-i18n="terrainGradient">Road Terrain</span></div>
+                  <select class="lang-select" id="selectTerrain" style="width: 100%;">
+                    <option value="flat">Flat Urban</option>
+                    <option value="rolling">Rolling Hills (+8%)</option>
+                    <option value="uphill_steep">Steep Uphill (+38%)</option>
+                    <option value="downhill">Downhill Regen (-24%)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div class="factor-item">
+                  <div class="factor-header"><span data-i18n="weatherCondition">Weather</span></div>
+                  <select class="lang-select" id="selectWeather" style="width: 100%;">
+                    <option value="clear">Clear / Dry Road</option>
+                    <option value="headwind">Strong Headwind (+16%)</option>
+                    <option value="rain">Wet Surface / Rain (+10%)</option>
+                    <option value="heavy_storm">Heavy Storm (+24%)</option>
+                  </select>
+                </div>
+
+                <div class="factor-item">
+                  <div class="factor-header"><span data-i18n="trafficDensity">Traffic Stop & Go</span></div>
+                  <select class="lang-select" id="selectTraffic" style="width: 100%;">
+                    <option value="low">Highway Cruise (0.96x)</option>
+                    <option value="moderate" selected>Moderate Urban (1.0x)</option>
+                    <option value="heavy_stop_go">Dense Congestion (1.15x)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Charging Simulation Box & AI Recommendations -->
+          <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div class="card-title">
+                <span data-i18n="chargingStatus">Charging Status & Simulator</span>
+              </div>
+
+              <div class="charging-sim-box" id="chargingSimStatus">
+                <div class="charging-sim-header">
+                  <span class="charging-badge idle" id="chargingSimBadge">Standby / Unplugged</span>
+                  <button class="btn btn-primary btn-sm" id="toggleChargeSimBtn">Start Simulation Charging</button>
+                </div>
+
+                <div class="sim-metrics-grid">
+                  <div class="sim-metric-cell">
+                    <div class="sim-metric-val" id="simPower">0.0 kW</div>
+                    <div class="sim-metric-lbl">CC/CV Power</div>
+                  </div>
+                  <div class="sim-metric-cell">
+                    <div class="sim-metric-val" id="simEnergy">0.0 kWh</div>
+                    <div class="sim-metric-lbl">Delivered</div>
+                  </div>
+                  <div class="sim-metric-cell">
+                    <div class="sim-metric-val" id="simCost">₹0.00</div>
+                    <div class="sim-metric-lbl">Session Cost</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 14px;">
+              <div style="font-size: 0.84rem; font-weight: 600; margin-bottom: 6px;">AI Range & Health Insights</div>
+              <div id="dashboardInsights">
+                <!-- Insights injected by engine -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 4 Key Stat Tiles -->
+        <div class="grid-4" style="margin-bottom: 24px;">
+          <div class="stat-tile">
+            <span class="stat-label" data-i18n="batteryLevel">Battery Percentage (SOC)</span>
+            <span class="stat-value" id="statSoc" style="color: var(--accent-emerald);">78%</span>
+            <span class="stat-sub">Nominal Voltage: 51.1V</span>
+          </div>
+
+          <div class="stat-tile">
+            <span class="stat-label" data-i18n="batteryHealth">Battery Health (SOH)</span>
+            <span class="stat-value" id="statSoh">96.5%</span>
+            <span class="stat-sub">142 Lifecycle Charge Cycles</span>
+          </div>
+
+          <div class="stat-tile">
+            <span class="stat-label" data-i18n="energyEfficiency">Dynamic Consumption</span>
+            <span class="stat-value" id="statEfficiency">35.8 Wh/km</span>
+            <span class="stat-sub">Rated Base: 34 Wh/km</span>
+          </div>
+
+          <div class="stat-tile">
+            <span class="stat-label" data-i18n="odometer">Odometer Reading</span>
+            <span class="stat-value" id="statOdo">4,890 km</span>
+            <span class="stat-sub">Service OK (Next: 7,500 km)</span>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========================================================== -->
+      <!-- TAB 2: CHARGING STATIONS & GOOGLE MAPS DISCOVERY           -->
+      <!-- ========================================================== -->
+      <section class="tab-pane" id="tab-map">
+        <div class="map-view-container">
+          
+          <!-- Interactive Map Frame -->
+          <div class="interactive-map-frame">
+            <div id="map-canvas"></div>
+          </div>
+
+          <!-- Stations Discovery Sidebar -->
+          <div class="stations-sidebar-panel">
+            
+            <div class="search-input-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="stationSearchInput" placeholder="Search by station, operator, area..." data-i18n-placeholder="search">
+            </div>
+
+            <!-- Filter Chips -->
+            <div class="filter-chips-row">
+              <button class="filter-chip active" id="filterChipCompat">✓ Compatible Only</button>
+              <button class="filter-chip" id="filterChipFast">⚡ DC Fast</button>
+              <button class="filter-chip" id="filterChipSwap">🔄 Battery Swap</button>
+              <button class="filter-chip" id="filterChipAvail">Available Now</button>
+              <button class="filter-chip" id="filterChipFav">⭐ Favorites</button>
+            </div>
+
+            <!-- Stations List -->
+            <div id="stationsListContainer" style="display: flex; flex-direction: column; gap: 10px; overflow-y: auto;">
+              <!-- Populated by JavaScript -->
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ========================================================== -->
+      <!-- TAB 3: TRIP PLANNER & ROUTE CHARGING OPTIMIZER             -->
+      <!-- ========================================================== -->
+      <section class="tab-pane" id="tab-route">
+        <div class="route-planner-box">
+          
+          <!-- Left Configuration Card -->
+          <div class="card">
+            <div class="card-title">
+              <span data-i18n="planTrip">Intelligent EV Route Planner</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div>
+                <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 4px; display: block;">Select Pre-configured Corridor</label>
+                <select class="lang-select" id="presetRouteSelect" style="width: 100%;">
+                  <!-- Populated dynamically -->
+                </select>
+              </div>
+
+              <div>
+                <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 4px; display: block;" data-i18n="routeOrigin">Starting Point</label>
+                <input type="text" class="lang-select" id="routeOriginInput" value="MG Road, Central Bengaluru" style="width: 100%;">
+              </div>
+
+              <div>
+                <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 4px; display: block;" data-i18n="routeDestination">Destination</label>
+                <input type="text" class="lang-select" id="routeDestInput" value="Nandi Hills Peak Top" style="width: 100%;">
+              </div>
+
+              <div>
+                <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 4px; display: block;">Corridor Distance (km)</label>
+                <input type="number" class="lang-select" id="routeDistanceInput" value="62.5" style="width: 100%;">
+              </div>
+
+              <button class="btn btn-primary btn-full" id="executePlanBtn">
+                ⚡ Calculate Optimal EV Route & Stops
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Calculation Result & Stops Timeline -->
+          <div id="tripPlanResultOutput">
+            <!-- Populated dynamically -->
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ========================================================== -->
+      <!-- TAB 4: MY GARAGE (MULTI-VEHICLE MANAGEMENT)                -->
+      <!-- ========================================================== -->
+      <section class="tab-pane" id="tab-garage">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <div>
+            <h2 style="font-size: 1.35rem;" data-i18n="navVehicles">My EV Garage</h2>
+            <p style="color: var(--text-secondary); font-size: 0.85rem;">Manage 2-Wheelers, Commuter Bikes, Performance EV Bikes & 4W Vehicles</p>
+          </div>
+          <button class="btn btn-primary" id="addVehicleBtn" data-i18n="addVehicle">
+            + Add New Vehicle
+          </button>
+        </div>
+
+        <div class="grid-3" id="garageVehiclesGrid">
+          <!-- Populated by JavaScript -->
+        </div>
+      </section>
+
+      <!-- ========================================================== -->
+      <!-- TAB 5: ANALYTICS, BATTERY HEALTH & GREEN SAVINGS          -->
+      <!-- ========================================================== -->
+      <section class="tab-pane" id="tab-analytics">
+        <div class="grid-3" style="margin-bottom: 24px;">
+          <div class="card">
+            <span class="stat-label">Net Fuel Cost Saved vs Petrol</span>
+            <div class="stat-value" id="analyticsTotalSavings" style="color: var(--accent-emerald); font-size: 1.8rem; margin: 8px 0;">₹10,320</div>
+            <div style="font-size: 0.82rem; color: var(--text-secondary);">
+              Petrol 2W: <b id="analyticsPetrolCost">₹2.45/km</b> | EV: <b id="analyticsEvCost">₹0.34/km</b>
+            </div>
+          </div>
+
+          <div class="card">
+            <span class="stat-label">Carbon Emissions Offset</span>
+            <div class="stat-value" id="analyticsCo2Saved" style="color: var(--accent-cyan); font-size: 1.8rem; margin: 8px 0;">293.4 kg</div>
+            <div style="font-size: 0.82rem; color: var(--text-secondary);">
+              Equivalent to absorbing <b id="analyticsTreesEquiv">14 mature trees</b>
+            </div>
+          </div>
+
+          <div class="card">
+            <span class="stat-label">Battery Health Rating</span>
+            <div class="stat-value" id="analyticsSohGrade" style="color: #a855f7; font-size: 1.5rem; margin: 8px 0;">Tier 1 Optimal</div>
+            <div style="font-size: 0.82rem; color: var(--text-secondary);">
+              Under warranty until 2029 (Unlimited km)
+            </div>
+          </div>
+        </div>
+
+        <!-- Battery Degradation Trend Curve -->
+        <div class="card" style="margin-bottom: 24px;">
+          <div class="card-title">
+            <span>Battery Degradation & Capacity Retention Curve (SOH vs Cycles)</span>
+          </div>
+          <div style="width: 100%; overflow-x: auto;">
+            <svg id="batteryDegradationSvg" width="520" height="190" viewBox="0 0 520 190" style="margin: 0 auto; display: block;"></svg>
+          </div>
+        </div>
+
+        <!-- Charging History Table -->
+        <div class="card">
+          <div class="card-title">
+            <span>Recent Charging History & Energy Logs</span>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Charging Station</th>
+                  <th>Port Type</th>
+                  <th>Energy Consumed</th>
+                  <th>SoC Range</th>
+                  <th>Cost Paid</th>
+                </tr>
+              </thead>
+              <tbody id="chargingHistoryTableBody">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================== -->
+      <!-- TAB 6: ENTERPRISE FLEET PORTAL                             -->
+      <!-- ========================================================== -->
+      <section class="tab-pane" id="tab-fleet">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <div>
+            <h2 style="font-size: 1.35rem;" data-i18n="fleetOverview">Enterprise Fleet Portal</h2>
+            <p style="color: var(--text-secondary); font-size: 0.85rem;">Real-time Telemetry, Driver Management & Energy Optimization for Logistics</p>
+          </div>
+          <button class="btn btn-primary" id="exportFleetCsvBtn" data-i18n="exportFleetReport">
+            📥 Download Fleet CSV Telemetry
+          </button>
+        </div>
+
+        <div class="grid-4" style="margin-bottom: 24px;">
+          <div class="stat-tile">
+            <span class="stat-label">Total Fleet Vehicles</span>
+            <span class="stat-value" id="fleetKpiTotal">6</span>
+            <span class="stat-sub">Commercial 2W & Bikes</span>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-label">Active En Route</span>
+            <span class="stat-value" id="fleetKpiOnRoute" style="color: var(--accent-emerald);">3</span>
+            <span class="stat-sub">Deliveries in progress</span>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-label">Currently Charging</span>
+            <span class="stat-value" id="fleetKpiCharging" style="color: var(--accent-cyan);">1</span>
+            <span class="stat-sub">Fast Charging Hub</span>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-label">Maintenance / Alerts</span>
+            <span class="stat-value" id="fleetKpiMaintenance" style="color: var(--accent-rose);">1</span>
+            <span class="stat-sub">Brake Service Overdue</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>Fleet Vehicles Real-Time Telemetry</span>
+            <span style="font-size: 0.84rem; color: var(--accent-emerald);">Fleet Avg: <b id="fleetKpiEfficiency">34.8 Wh/km</b> • Total Fuel Saved: <b id="fleetKpiSavings">₹2,31,000</b></span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Vehicle & Plate</th>
+                  <th>Assigned Driver</th>
+                  <th>Status</th>
+                  <th>SoC (SOH)</th>
+                  <th>Efficiency Wh/km</th>
+                  <th>Current Location</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="fleetTableBody">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================== -->
+      <!-- TAB 7: ECOSYSTEM, AI COACH, SWAPPING & ROAD ASSISTANCE     -->
+      <!-- ========================================================== -->
+      <section class="tab-pane" id="tab-ecosystem">
+        
+        <div class="grid-3" style="margin-bottom: 24px;">
+          
+          <!-- AI Driving Coach Column -->
+          <div>
+            <h3 style="font-size: 1.15rem; margin-bottom: 14px;" data-i18n="aiCoach">AI Driving Efficiency Coach</h3>
+            <div id="aiCoachingContainer">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+
+          <!-- Battery Swapping & QR Payment Column -->
+          <div>
+            <h3 style="font-size: 1.15rem; margin-bottom: 14px;">Battery Swapping & Instant Checkout</h3>
+
+            <!-- Instant Battery Swap Card -->
+            <div class="card" style="margin-bottom: 18px; border: 1px solid rgba(16, 185, 129, 0.3);">
+              <div class="card-title">
+                <span data-i18n="batterySwap">Instant Battery Swapping</span>
+              </div>
+              <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 14px;">
+                Replace drained battery pack with 100% charged pack at any Gogoro or Sun Mobility cabinet in under 60 seconds.
+              </p>
+              <button class="btn btn-primary btn-full" id="reserveBatterySwapBtn" data-i18n="swapReserve">
+                🔄 Reserve 2 Fresh Packs (60s guarantee)
+              </button>
+            </div>
+
+            <!-- QR Charger Checkout Card -->
+            <div class="card" style="border: 1px solid rgba(6, 182, 212, 0.3);">
+              <div class="card-title">
+                <span data-i18n="qrScanner">QR Charger Checkout Simulator</span>
+              </div>
+              <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 14px;">
+                Simulate QR scan at public charger, initiate seamless digital payment, and generate official GST charging receipt.
+              </p>
+              <button class="btn btn-cyan btn-full" id="qrCheckoutBtn">
+                📱 Scan Station QR & Pay (₹40.00)
+              </button>
+            </div>
+
+            <!-- Roadside Emergency SOS Card -->
+            <div class="card" style="margin-top: 18px; border: 1px solid rgba(244, 63, 94, 0.3);">
+              <div class="card-title">
+                <span style="color: var(--accent-rose);" data-i18n="roadsideSOS">Emergency Roadside SOS</span>
+              </div>
+              <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 14px;">
+                Stranded with 0% battery? 1-touch dispatch for Mobile EV Powerbank Charging Van or Tow Rescue.
+              </p>
+              <button class="btn btn-danger btn-full" id="triggerSosBtn">
+                🚨 Dispatch Emergency SOS Rescue
+              </button>
+            </div>
+          </div>
+
+          <!-- Document Locker & Loyalty Points Column -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <h3 style="font-size: 1.15rem;" data-i18n="docLocker">Vehicle Document Locker</h3>
+              <span class="status-pill success" style="font-size: 0.8rem;">
+                🌱 <b id="ecoLoyaltyPoints">420</b> Green Points
+              </span>
+            </div>
+
+            <div id="documentsLockerContainer">
+              <!-- Populated dynamically -->
+            </div>
+
+            <div style="margin-top: 24px;">
+              <h3 style="font-size: 1.05rem; margin-bottom: 12px;">Authorized EV Service Centers</h3>
+              <div id="serviceCentersList">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- MOBILE BOTTOM NAVIGATION (PHONES) -->
+    <nav class="mobile-bottom-nav">
+      <button class="mobile-nav-btn active" data-tab="dashboard">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+        <span>Home</span>
+      </button>
+
+      <button class="mobile-nav-btn" data-tab="map">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/></svg>
+        <span>Stations</span>
+      </button>
+
+      <button class="mobile-nav-btn" data-tab="route">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="19" r="3"/><circle cx="18" cy="5" r="3"/><path d="M12 19h4.5a3.5 3.5 0 0 0 0-7h-9a3.5 3.5 0 0 1 0-7H12"/></svg>
+        <span>Trip</span>
+      </button>
+
+      <button class="mobile-nav-btn" data-tab="garage">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9C2.1 11.2 2 11.6 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+        <span>Garage</span>
+      </button>
+
+      <button class="mobile-nav-btn" data-tab="fleet">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/></svg>
+        <span>Fleet</span>
+      </button>
+    </nav>
+
+  </main>
+</div>
+
+<!-- ============================================================== -->
+<!-- MODAL DIALOGS                                                  -->
+<!-- ============================================================== -->
+
+<!-- 1. Station Details Modal -->
+<div class="modal-backdrop" id="stationDetailModal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div>
+        <h3 class="modal-title" id="modalStationName">Station Details</h3>
+        <span style="font-size: 0.8rem; color: var(--text-muted);" id="modalStationOperator">Operator</span>
+      </div>
+      <button class="close-btn">&times;</button>
+    </div>
+
+    <div style="font-size: 0.84rem; color: var(--text-secondary);" id="modalStationAddress">Address</div>
+
+    <div id="modalStationCompatBox" class="status-pill success" style="padding: 8px 12px; font-size: 0.84rem;">
+      Compatible
+    </div>
+
+    <div class="grid-2" style="font-size: 0.85rem;">
+      <div>Power Output: <b id="modalStationPower">6.0 kW</b></div>
+      <div>Tariff: <b id="modalStationPricing">₹12.5 / kWh</b></div>
+      <div style="grid-column: span 2;">Availability: <b id="modalStationPorts">3 of 4 ports vacant</b></div>
+    </div>
+
+    <div>
+      <div style="font-size: 0.82rem; font-weight: 600; margin-bottom: 6px;">Station Amenities</div>
+      <div id="modalStationAmenities" style="display: flex; flex-wrap: wrap;"></div>
+    </div>
+
+    <div>
+      <div style="font-size: 0.82rem; font-weight: 600; margin-bottom: 6px;">Community Rider Reviews</div>
+      <div id="modalStationReviews" style="max-height: 140px; overflow-y: auto;"></div>
+    </div>
+
+    <div style="display: flex; gap: 10px; margin-top: 10px;">
+      <button class="btn btn-secondary btn-full" id="modalReservePortBtn">Reserve Port (30m)</button>
+      <button class="btn btn-primary btn-full" id="modalChargeHereBtn">⚡ Charge Here Now</button>
+    </div>
+  </div>
+</div>
+
+<!-- 2. Add New Vehicle Modal -->
+<div class="modal-backdrop" id="addVehicleModal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 class="modal-title" data-i18n="addVehicle">Add Vehicle to Garage</h3>
+      <button class="close-btn">&times;</button>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <div>
+        <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 4px; display: block;">Select EV Model Template</label>
+        <select class="lang-select" id="vehicleTemplateSelect" style="width: 100%;">
+          <!-- Populated from vehicle templates -->
+        </select>
+      </div>
+
+      <div>
+        <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 4px; display: block;">Vehicle Nickname / Name</label>
+        <input type="text" class="lang-select" id="newVehicleNickname" placeholder="e.g. Daily Commuter Stealth" style="width: 100%;">
+      </div>
+
+      <div>
+        <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 4px; display: block;">Registration Plate Number</label>
+        <input type="text" class="lang-select" id="newVehicleReg" placeholder="e.g. KA-05-EV-1234" style="width: 100%;">
+      </div>
+
+      <div>
+        <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 4px; display: block;">Current Odometer (km)</label>
+        <input type="number" class="lang-select" id="newVehicleOdo" value="500" style="width: 100%;">
+      </div>
+
+      <button class="btn btn-primary btn-full" id="saveNewVehicleBtn" style="margin-top: 8px;" data-i18n="save">
+        Save & Add to Garage
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 3. Diagnostics & Alerts Modal -->
+<div class="modal-backdrop" id="alertsModal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 class="modal-title">Vehicle Diagnostics & Alerts</h3>
+      <button class="close-btn">&times;</button>
+    </div>
+
+    <div id="alertsListContainer" style="display: flex; flex-direction: column; gap: 10px;">
+      <!-- Populated dynamically -->
+      <div class="status-pill warning" style="padding: 10px; font-size: 0.85rem; border-radius: 8px;">
+        ⚠️ <b>Tyre Pressure Low:</b> Front: 29.5 PSI (Nominal: 30 PSI). Under-inflation reduces range by ~6.8%.
+      </div>
+      <div class="status-pill info" style="padding: 10px; font-size: 0.85rem; border-radius: 8px;">
+        ℹ️ <b>Insurance Expiry:</b> Policy expires in 42 days. View document locker to renew.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Leaflet Map JS Library (with graceful fallback handled in app.js) -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<!-- Application Core Modules -->
+<script src="js/i18n.js"></script>
+<script src="js/vehicleDatabase.js"></script>
+<script src="js/physicsRangeEngine.js"></script>
+<script src="js/stationsDatabase.js"></script>
+<script src="js/tripPlanner.js"></script>
+<script src="js/telemetryDashboard.js"></script>
+<script src="js/alertsEngine.js"></script>
+<script src="js/fleetManagement.js"></script>
+<script src="js/communityAndEcosystem.js"></script>
+<script src="js/apiClient.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

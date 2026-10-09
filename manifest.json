@@ -1,0 +1,16 @@
+{
+  "name": "AeroVolt EV Enterprise - 2W & Multi-EV Range Platform",
+  "short_name": "AeroVolt EV",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0a0f1d",
+  "theme_color": "#10b981",
+  "description": "Enterprise-grade EV charging discovery, real-world physics & AI range prediction, multi-vehicle telemetry, and commercial fleet management platform.",
+  "icons": [
+    {
+      "src": "assets/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
